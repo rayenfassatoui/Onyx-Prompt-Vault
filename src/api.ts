@@ -1,6 +1,6 @@
 import { Prompt } from '../types';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001/api';
 const ACCESS_CODE = '1234'; // In a real app, this would be managed via session/token
 
 const getHeaders = () => ({
@@ -53,5 +53,38 @@ export const api = {
             headers: getHeaders(),
         });
         if (!res.ok) throw new Error('Failed to delete prompt');
+    },
+
+    generatePrompt: async (instruction: string, currentContent: string, apiKey: string, model: string): Promise<string> => {
+        const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`,
+                'HTTP-Referer': 'http://localhost:3000',
+                'X-Title': 'Onyx Prompt Vault',
+            },
+            body: JSON.stringify({
+                model: model,
+                messages: [
+                    {
+                        role: 'system',
+                        content: 'You are an expert prompt engineer. Your goal is to improve or generate prompt templates based on user instructions. You should output ONLY the prompt content, no explanations.',
+                    },
+                    {
+                        role: 'user',
+                        content: `Current Content: "${currentContent}"\n\nInstruction: ${instruction}\n\nOutput the improved/generated prompt:`,
+                    },
+                ],
+            }),
+        });
+
+        if (!res.ok) {
+            const error = await res.json();
+            throw new Error(error.error?.message || 'Failed to generate prompt');
+        }
+
+        const data = await res.json();
+        return data.choices[0].message.content;
     },
 };

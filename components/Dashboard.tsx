@@ -5,6 +5,7 @@ import { PromptCard } from './PromptCard';
 import { PrismModal } from './PrismModal';
 import { SpotlightGrid } from './SpotlightGrid';
 import { TagRail } from './TagRail';
+import { SettingsModal } from './SettingsModal';
 import { Prompt } from '../types';
 import { api } from '../src/api';
 
@@ -13,6 +14,7 @@ export const Dashboard: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedPromptId, setSelectedPromptId] = useState<string | null>(null);
     const [selectedTags, setSelectedTags] = useState<string[]>([]);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
     useEffect(() => {
         loadPrompts();
@@ -109,6 +111,15 @@ export const Dashboard: React.FC = () => {
                     <div className="flex items-center gap-3">
                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
                         <span className="font-mono font-bold tracking-widest text-sm">ONYX <span className="text-onyx-500">v1.3</span></span>
+                    </div>
+
+                    <div className="flex items-center gap-4">
+                        <button
+                            onClick={() => setIsSettingsOpen(true)}
+                            className="text-onyx-500 hover:text-white transition-colors"
+                        >
+                            <Terminal className="w-4 h-4" />
+                        </button>
                     </div>
 
                     {/* Search Bar */}
@@ -211,6 +222,11 @@ export const Dashboard: React.FC = () => {
                 onClose={() => setSelectedPromptId(null)}
                 onUpdatePrompt={handleUpdatePrompt}
                 onDeletePrompt={handleDeletePrompt}
+            />
+
+            <SettingsModal
+                isOpen={isSettingsOpen}
+                onClose={() => setIsSettingsOpen(false)}
             />
         </div>
     );
