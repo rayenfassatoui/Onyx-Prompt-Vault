@@ -3,8 +3,6 @@ import { Airlock } from './components/Airlock';
 import { Dashboard } from './components/Dashboard';
 
 const App: React.FC = () => {
-  const [isLocked, setIsLocked] = useState(true);
-
   // Keyboard shortcut for search (Mock implementation for focus)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -19,13 +17,7 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <>
-      {isLocked ? (
-        <Airlock onUnlock={() => setIsLocked(false)} />
-      ) : (
-        <Dashboard />
-      )}
-    </>
+    <Dashboard />
   );
 };
 

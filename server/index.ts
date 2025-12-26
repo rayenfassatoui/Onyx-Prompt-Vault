@@ -14,13 +14,9 @@ app.use(cors());
 app.use(express.json());
 
 // Auth Middleware
+// Auth Middleware (Disabled)
 const checkAuth = (req: express.Request, res: express.Response, next: express.NextFunction) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader === process.env.ACCESS_CODE) {
-        next();
-    } else {
-        res.status(401).json({ error: 'Unauthorized' });
-    }
+    next();
 };
 
 // Verify Access
