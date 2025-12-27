@@ -1,8 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { db } from './db';
-import { prompts } from './schema';
+import { db } from './db.js';
+import { prompts } from './schema.js';
 import { eq, desc } from 'drizzle-orm';
 
 dotenv.config();
